@@ -1,0 +1,176 @@
+
+
+
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
+
+<script src="https://elfalem.github.io/Leaflet.curve/src/leaflet.curve.js"></script>
+
+  <!--
+  -->
+   
+ <!DOCTYPE html>
+ <html>
+   
+	<head>
+	<style>
+	<!-- rozciaganie na ekranie -->
+	
+	body 
+	{margin: 0}
+	
+	html, #map 
+	{
+	margin-top: 35px;
+    height: 96%;
+    width: 100%;
+	}
+	
+	</style>
+	<title> LOT Polish Airlines | Destinations  </title> 
+	<meta charset="UTF-8">
+	<link rel="icon" type="image/ico" href="favicon.ico"/> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="icon" type="image/png" href="food_pin.png">
+  
+	</head>
+
+   
+ <body>
+ <a href="https://lot.com/">
+ <img style="float: left;" src="LOT_logo.png">
+ </a>
+ <p style="font-family:helvetica; text-align: center; font-size: 1.2em">Learn more about actual routemap of LOT Polish Airlines.</p>
+  
+ 
+ 
+ <div id="map"> 
+ 
+ <script src="locations.js"></script> 
+ <link rel="stylesheet" href="css/leaflet.css">
+   
+   
+ <script> 
+   // ,{maxZoom:22} po 'map'
+   var mymap = L.map('map').setView([52.21614947735841, 21.02002643154671], 3);
+   
+   
+   
+   
+   var OpenStreetMap = 
+   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', 
+   {foo: 'bar',
+   attribution: '<a href="http://openstreetmap.org/copyright">OpenStreetMap</a> | Kacper Sito 2022'
+   });
+   
+	OpenStreetMap.addTo(mymap);
+	L.control.scale().addTo(mymap);
+	
+	var WAWcircle = L.circle([52.2161491, 21.0200264],{
+	color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: 50000
+	}).addTo(mymap);
+	
+	
+	
+	for (var i = 0; i<locations.length; i++){
+	//marker = new L.marker([locations[i][1], locations[i][2]])
+	//.bindPopup(locations[i][0])
+	//.addTo(mymap);
+	
+	var circleAirport = L.circleMarker([locations[i][1], locations[i][2]],{radius: 6, color: 'rgba(37,80,190)'}).addTo(mymap);
+	circleAirport.bindPopup(locations[i][0]).addTo(mymap);
+	
+	var circleAirportPoint = L.circleMarker([locations[i][1], locations[i][2]],{radius: 1, color: 'rgba(37,80,190)'}).addTo(mymap);
+	
+	}
+	
+	//var pointA = [52.21614947735841, 21.02002643154671];
+
+	//var circle2 = L.circleMarker([52.4161491, 21.0200264],{radius: 5, color: 'rgba(84,213,213,0.5)'}).addTo(mymap)
+	//circle2._orgRadius = circle2.getRadius();
+	
+
+
+	// Scale circle markers by using the zoom value
+	// you need to know what the min value is, 
+	// calculated at runtime or prior
+	var minValue = 1;
+	function calcRadius(val, zoom) {
+		return 1.0083 * Math.pow(val/minValue,0.5716) * (zoom / 2);      
+	}
+
+	mymap.on('zoomend', function() {
+		var currentZoom = mymap.getZoom();
+		// Recalc always with the original value
+		circleAirport.setRadius(calcRadius(circleAirport._orgRadius,currentZoom))
+	});
+
+
+	
+
+	
+	var latlngs = [];
+	for (var i = 0; i<locations.length; i++){
+	//var latlng1 = [52.21614947735841, 21.02002643154671]
+		//latlng2 = [51.470020, -0.454295]
+		
+	var latlng1 = [locations[i][1], locations[i][2]]
+	latlng2 = [52.21614947735841, 21.02002643154671]
+
+	var offsetX = latlng2[1] - latlng1[1],
+		offsetY = latlng2[0] - latlng1[0];
+
+	var r = Math.sqrt( Math.pow(offsetX, 2) + Math.pow(offsetY, 2) ),
+		theta = Math.atan2(offsetY, offsetX);
+
+	var thetaOffset = (3.14/10);
+
+	var r2 = (r/2)/(Math.cos(thetaOffset)),
+		theta2 = theta + thetaOffset;
+
+	var midpointX = (r2 * Math.cos(theta2)) + latlng1[1],
+		midpointY = (r2 * Math.sin(theta2)) + latlng1[0];
+
+	var midpointLatLng = [midpointY, midpointX];
+
+	latlngs.push(latlng1, midpointLatLng, latlng2);
+
+	var pathOptions = {
+		color: 'rgba(84,213,213,0.5)',
+		weight: 5
+	}
+
+	if (typeof document.getElementById('map').animate === "function") { 
+		var durationBase = 2000;
+		var duration = Math.sqrt(Math.log(r)) * durationBase;
+		// Scales the animation duration so that it's related to the line length
+		// (but such that the longest and shortest lines' durations are not too different).
+		// You may want to use a different scaling factor.
+		pathOptions.animate = {
+			duration: duration,
+			iterations: Infinity,
+			easing: 'ease-in-out',
+			direction: 'alternate'
+		}
+	}
+
+	var curvedPath = L.curve(
+		[
+			'M', latlng1,
+			'Q', midpointLatLng,
+				 latlng2
+		], {color: 'rgba(37,80,190,0.5)', weight: 4}).addTo(mymap); //{color: 'rgba(84,67,201,0.5)', weight: 6}
+	
+
+	}
+
+
+   
+</script> 
+</body> 
+</html>
+   
