@@ -133,69 +133,112 @@
 	});
 
 
+	var allPaths;
 	
-
+	function drawDestLine(WAW, arrLat, arrLng, col) { //pass point dep airport and arr airport
 	
-	var latlngs = [];
-	for (var i = 0; i<locations.length; i++){
-	//var latlng1 = [52.21614947735841, 21.02002643154671]
-		//latlng2 = [51.470020, -0.454295]
-		
-	var latlng1 = [locations[i][1], locations[i][2]]
-	latlng2 = [52.16586593126193, 20.967062665855927]
+		//var latlng1 = [52.21614947735841, 21.02002643154671]
+			//latlng2 = [51.470020, -0.454295]
+		var latlngs = [];
+		var latlng1 = [arrLat, arrLng];
+		latlng2 = WAW;
 
-	var offsetX = latlng2[1] - latlng1[1],
-		offsetY = latlng2[0] - latlng1[0];
+		var offsetX = latlng2[1] - latlng1[1],
+			offsetY = latlng2[0] - latlng1[0];
 
-	var r = Math.sqrt( Math.pow(offsetX, 2) + Math.pow(offsetY, 2) ),
-		theta = Math.atan2(offsetY, offsetX);
+		var r = Math.sqrt( Math.pow(offsetX, 2) + Math.pow(offsetY, 2) ),
+			theta = Math.atan2(offsetY, offsetX);
 
-	var thetaOffset = (3.14/10);
+		var thetaOffset = (3.14/10);
 
-	var r2 = (r/2)/(Math.cos(thetaOffset)),
-		theta2 = theta + thetaOffset;
+		var r2 = (r/2)/(Math.cos(thetaOffset)),
+			theta2 = theta + thetaOffset;
 
-	var midpointX = (r2 * Math.cos(theta2)) + latlng1[1],
-		midpointY = (r2 * Math.sin(theta2)) + latlng1[0];
+		var midpointX = (r2 * Math.cos(theta2)) + latlng1[1],
+			midpointY = (r2 * Math.sin(theta2)) + latlng1[0];
 
-	var midpointLatLng = [midpointY, midpointX];
+		var midpointLatLng = [midpointY, midpointX];
 
-	latlngs.push(latlng1, midpointLatLng, latlng2);
+		latlngs.push(latlng1, midpointLatLng, latlng2);
 
-	var pathOptions = {
-		color: 'rgba(37,38,103,0.5)',
-		weight: 4
-	}
-
-	if (typeof document.getElementById('map').animate === "function") { 
-		var durationBase = 2000;
-		var duration = Math.sqrt(Math.log(r)) * durationBase;
-		// Scales the animation duration so that it's related to the line length
-		// (but such that the longest and shortest lines' durations are not too different).
-		// You may want to use a different scaling factor.
-		pathOptions.animate = {
-			duration: duration,
-			iterations: Infinity,
-			easing: 'ease-in-out',
-			direction: 'alternate'
+		var pathOptions = {
+			color: 'rgba(37,38,103,0.5)',
+			weight: 4
 		}
-	}
 
-	var curvedPath = L.curve(
-		[
-			'M', latlng1,
-			'Q', midpointLatLng,
-				 latlng2
-		], {color: 'rgba(10,44,112, 0.7)', weight: 2}).addTo(mymap); //{color: 'rgba(84,67,201,0.5)', weight: 6}
+		if (typeof document.getElementById('map').animate === "function") { 
+			var durationBase = 2000;
+			var duration = Math.sqrt(Math.log(r)) * durationBase;
+			// Scales the animation duration so that it's related to the line length
+			// (but such that the longest and shortest lines' durations are not too different).
+			// You may want to use a different scaling factor.
+			pathOptions.animate = {
+				duration: duration,
+				iterations: Infinity,
+				easing: 'ease-in-out',
+				direction: 'alternate'
+			}
+		}
+
+		var curvedPath = L.curve(
+			[
+				'M', latlng1,
+				'Q', midpointLatLng,
+					 latlng2
+			], {color: col, weight: 2}).addTo(mymap); //{color: 'rgba(84,67,201,0.5)', weight: 6}
+		
+		allPaths = curvedPath;
+
+		
+			
+	}
+	
+	// airport from which route should be marked
+	var WAW = [52.16586593126193, 20.967062665855927];
+	var KRK = [﻿50.07778, 19.78472];
+	var BUD = [47.433333333333, 19.233333333333	];
 	
 
+	for (var i = 0; i<locations.length; i++){
+		drawDestLine(WAW,locations[i][1], locations[i][2],'rgba(10,44,112, 0.7)');
 	}
+	
+	drawDestLine(BUD,locations[59][1], locations[59][2],'rgba(0,102,0, 0.7)');
+	drawDestLine(BUD,locations[1][1], locations[1][2],'rgba(0,102,0, 0.7)');
+	//drawDestLine(KRK,locations[i][1], locations[i][2]);
+	
+	
 	
 	//checkbox
-	
+/*
+	     var autoZoomCheckbox = L.control({position: 'topleft'});
+        autoZoomCheckbox.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'command');
+            div.innerHTML = '<form><input id="command" type="checkbox"/>Automatic fit to bounds</form>';
+            return div;
+        };
+        autoZoomCheckbox.addTo(mymap);
+		
+		
+	function clearRoutes(){
+		mymap.removeLayer(allPaths);
+	}
 
+	// add the event handler
+	function handleCommand() {
+	   //alert("Clicked, checked = " + this.checked);
+	   clearRoutes();
+	}
 
-   
+	function handleCommand2() {
+	   alert("Clicked, checked = " + this.checked);
+	   //clearRoutes();
+	}
+
+	//document.getElementById ("command").addEventListener ("click", handleCommand, false);
+	document.getElementById ("command").addEventListener ("click", handleCommand2, true);
+ */
+ 
 </script> 
 </body> 
 </html>
