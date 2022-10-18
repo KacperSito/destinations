@@ -38,12 +38,12 @@
 	  
 	
 	form{
-	font-size: 17;
+	font-size: 15;
 	font-weight: bold;
-	margin-top: 30px;
-	margin-right: 15px;
-	padding: 8px;
-	background-color: #ffffff;
+	margin-top: 15px;
+	margin-right: 5px;
+	padding: 5px;
+	background-color: rgb(255,255,255, 0.8);
 	border-radius: 5px;
 	color: #444444;
 	}
@@ -222,7 +222,7 @@
 	     var autoZoomCheckbox = L.control({position: 'topright'});
         autoZoomCheckbox.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'command');
-            div.innerHTML = '<form><input id="command" type="checkbox" checked="true"/>Only Airports</form>';
+            div.innerHTML = '<form><input id="command" type="checkbox" />Show only airports</form>'; //checked="true"
             return div;
         };
         autoZoomCheckbox.addTo(mymap);
@@ -235,7 +235,7 @@
 	// add the event handler
 	function handleCommand() {
 	   //alert("Clicked, checked = " + this.checked);
-	   if(this.checked == false){
+	   if(this.checked == true){
 	   clearRoutes();
 	   }
 	   else
