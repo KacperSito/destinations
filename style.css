@@ -1,0 +1,30 @@
+body 
+	{margin: 0}
+	
+html, #map 
+	{
+	
+    height: 96%;
+    width: 100%;
+	}
+     .leaflet-popup-content {
+
+        text-align:center;
+        img-align: center;
+    }
+	.leaflet-popup-content-wrapper {
+          padding: 0px;
+
+      }
+	  
+	
+form{
+	font-size: 15;
+	font-weight: bold;
+	margin-top: 15px;
+	margin-right: 5px;
+	padding: 5px;
+	background-color: rgb(255,255,255, 0.8);
+	border-radius: 5px;
+	color: #444444;
+	}
