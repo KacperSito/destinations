@@ -1,5 +1,5 @@
  // ,{maxZoom:22} po 'map'
-   var mymap = L.map('map', {zoomAnimationThreshold: 4}).setView([52.21614947735841, 21.02002643154671], 3);
+   var mymap = L.map('map',{zoomAnimationThreshold: 4}).setView([52.21614947735841, 21.02002643154671], 3);
    
    var OpenStreetMap = 
    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', 
@@ -13,10 +13,14 @@
 	
 	
 	var myIcon = L.icon({
-    iconUrl: 'lot_logo_web.png',
+    iconUrl: 'zuraw.png',
 	iconSize: [25, 25]
 	});
-
+	
+	var myIconPoint = L.icon({
+    iconUrl: 'zuraw.png',
+	iconSize: [15, 15]
+	});
 
 	
 	const lineOptions = {
@@ -34,13 +38,7 @@
 	};
 
 	
-	var WAWcircle = L.marker([52.16586593126193, 20.967062665855927],{
-	icon: myIcon
-	}).addTo(mymap);
-	
-	var BUDcircle = L.marker([47.433333333333, 19.233333333333],{
-	icon: myIcon
-	}).addTo(mymap);
+
 	
 	
 	
@@ -49,6 +47,7 @@
 	//.bindPopup(locations[i][0])
 	//.addTo(mymap);
 	
+	/**
 	var circleAirport = L.circleMarker([locations[i][1], locations[i][2]],{radius: 5, color: 'rgba(10,44,112)', weight: 2}).addTo(mymap);
 	circleAirport.bindTooltip(locations[i][0],
 	{direction: 'top'
@@ -58,12 +57,41 @@
 	
 	var circleAirportPoint = L.circleMarker([locations[i][1], locations[i][2]],{radius: 1, color: 'rgba(10,44,112)'}).addTo(mymap);
 	circleAirport.bindTooltip(locations[i][0],
-	{direction: 'top'
+	{direction: 'top',
+	});
+	**/
+	
+	var WAWcircleCrane = L.marker([locations[i][1], locations[i][2]],{
+	icon: myIconPoint
+	})
+	.addTo(mymap);
+
+	WAWcircleCrane.bindTooltip(locations[i][0],
+	{direction: 'top',
 	});
 
 	}
+	
+	var WAWcircle = L.marker([52.16586593126193, 20.967062665855927],{
+	icon: myIcon,
+	}).addTo(mymap);
+	
+	WAWcircle.bindTooltip("WAW",
+	{direction: 'top',
+	});
+	
+	
+	var BUDcircle = L.marker([47.433333333333, 19.233333333333],{
+	icon: myIcon
+	}).addTo(mymap);
+	BUDcircle.bindTooltip("BUD",
+	{direction: 'top',
+	});
+	
+	
 
-		var circleAirportLCY = L.circleMarker([51.504844, 0.049518],{radius: 5, color: 'rgba(10,44,112)'}).addTo(mymap);
+/*
+	var circleAirportLCY = L.circleMarker([51.504844, 0.049518],{radius: 5, color: 'rgba(10,44,112)'}).addTo(mymap);
 	circleAirportLCY.bindTooltip("LCY",
 	{direction: 'top'
 	});
@@ -72,7 +100,16 @@
 	circleAirportLCY.bindTooltip("LCY",
 	{direction: 'top'
 	});
+	*/
 	
+	var LCYcircleCrane = L.marker([51.504844, 0.049518],{
+	icon: myIconPoint
+	})
+	.addTo(mymap);
+
+	LCYcircleCrane.bindTooltip([51.504844, 0.049518],
+	{direction: 'top',
+	});
 
 	
 
@@ -83,12 +120,14 @@
 	function calcRadius(val, zoom) {
 		return 1.0083 * Math.pow(val/minValue,0.5716) * (zoom / 2);      
 	}
-
+/*
 	mymap.on('zoomend', function() {
 		var currentZoom = mymap.getZoom();
 		// Recalc always with the original value
 		circleAirport.setRadius(calcRadius(circleAirport._orgRadius,currentZoom))
 	});
+	*/
+
 
 
 	var allPaths=[];
