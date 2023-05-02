@@ -2,7 +2,9 @@
    var mymap = L.map('map',{zoomAnimationThreshold: 4}).setView([52.21614947735841, 21.02002643154671], 3);
    
    var OpenStreetMap = 
+   //L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png?(foo)',
    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', 
+   //https://github.com/openmaptiles
    {foo: 'bar',
    attribution: '<a href="http://openstreetmap.org/copyright">OpenStreetMap</a> | Kacper Sito 2023'
    });
@@ -40,26 +42,12 @@
 	
 
 	
-	
-	
+	/**
+	tu
 	for (var i = 0; i<locations.length; i++){
 	//marker = new L.marker([locations[i][1], locations[i][2]])
 	//.bindPopup(locations[i][0])
 	//.addTo(mymap);
-	
-	/**
-	var circleAirport = L.circleMarker([locations[i][1], locations[i][2]],{radius: 5, color: 'rgba(10,44,112)', weight: 2}).addTo(mymap);
-	circleAirport.bindTooltip(locations[i][0],
-	{direction: 'top'
-	});
-	
-
-	
-	var circleAirportPoint = L.circleMarker([locations[i][1], locations[i][2]],{radius: 1, color: 'rgba(10,44,112)'}).addTo(mymap);
-	circleAirport.bindTooltip(locations[i][0],
-	{direction: 'top',
-	});
-	**/
 	
 	var WAWcircleCrane = L.marker([locations[i][1], locations[i][2]],{
 	icon: myIconPoint
@@ -71,25 +59,9 @@
 	});
 
 	}
+	tu
+	**/
 	
-	var WAWcircle = L.marker([52.16586593126193, 20.967062665855927],{
-	icon: myIcon,
-	}).addTo(mymap);
-	
-	WAWcircle.bindTooltip("WAW",
-	{direction: 'top',
-	});
-	
-	
-	var BUDcircle = L.marker([47.433333333333, 19.233333333333],{
-	icon: myIcon
-	}).addTo(mymap);
-	BUDcircle.bindTooltip("BUD",
-	{direction: 'top',
-	});
-	
-	
-
 /*
 	var circleAirportLCY = L.circleMarker([51.504844, 0.049518],{radius: 5, color: 'rgba(10,44,112)'}).addTo(mymap);
 	circleAirportLCY.bindTooltip("LCY",
@@ -133,22 +105,21 @@
 	var allPaths=[];
 	var pathsGroup= L.layerGroup().addTo(mymap);
 	
-
-	
-	console.log(allPaths);
 	
 	// airport from which route should be marked
 	var WAW = [52.16586593126193, 20.967062665855927];
 	var KRK = [﻿50.07778, 19.78472];
 	var BUD = [47.433333333333, 19.233333333333	];
 	
-
+/**	
+tu
 	for (var i = 0; i<locations.length; i++){
 		//drawDestLine(WAW,locations[i][1], locations[i][2],'rgba(10,44,112, 0.7)');
 		const geodesic = new L.Geodesic([WAW, [locations[i][1], locations[i][2]]], lineOptions).addTo(pathsGroup);
 	}
 	
-
+tu
+**/
 	const geodesicLCY= new L.Geodesic([[locations[69][1],locations[69][2]], [51.504844, 0.049518]], lineOptionsNotWAW).addTo(pathsGroup);
 	const geodesicKRK= new L.Geodesic([KRK,[locations[63][1], locations[63][2]]],lineOptionsNotWAW).addTo(pathsGroup);
 	const geodesicICN= new L.Geodesic([BUD, [locations[59][1], locations[59][2]]], lineOptionsNotWAW).addTo(pathsGroup);
@@ -182,3 +153,42 @@
 	document.getElementById ("command").addEventListener ("click", handleCommand, false);
 	
 	
+	// new way of updating map with destinations
+	
+		for (var i = 0; i<dest.length; i++){
+		
+			console.log(dest[i][1])
+			//console.log(dest[i][0], airportsCoordinates[dest[i][0]].lat, airportsCoordinates[dest[i][0]].lng);
+			//console.log(dest[i][1], airportsCoordinates[dest[i][1]].lat, airportsCoordinates[dest[i][1]].lng);
+		
+		const geodesic = new L.Geodesic([[airportsCoordinates[dest[i][0]].lat, airportsCoordinates[dest[i][0]].lng], [airportsCoordinates[dest[i][1]].lat, airportsCoordinates[dest[i][1]].lng]], lineOptions).addTo(pathsGroup);
+	
+		
+
+		// crane logo airport
+		var circleCrane = L.marker([airportsCoordinates[dest[i][1]].lat, airportsCoordinates[dest[i][1]].lng],{
+			icon: myIconPoint
+			})
+			.addTo(mymap);
+		
+			circleCrane.bindTooltip(dest[i][1],
+			{direction: 'top',
+			});
+
+	}
+
+	var WAWcircle = L.marker([52.16586593126193, 20.967062665855927],{
+		icon: myIcon,
+		}).addTo(mymap);
+		
+		WAWcircle.bindTooltip("WAW",
+		{direction: 'top',
+		});
+		
+		
+		var BUDcircle = L.marker([47.433333333333, 19.233333333333],{
+		icon: myIcon
+		}).addTo(mymap);
+		BUDcircle.bindTooltip("BUD",
+		{direction: 'top',
+		});	
